@@ -15,14 +15,26 @@ To run, simply type:
     ruby ./ps_server.rb
 ```
 
+To run, testing with Docker (as I have), ensure docker is up and running and type:
+
+```
+    ./docker_test.sh
+```
+
 Testing
 =======
 
-When the server is running, type:
+When the server is running, type - either natively, or within the running docker container:
 
 ```
     curl http://localhost:1337/      # for a 404 response
     curl http://localhost:1337/ps    # to exercise the ps functionality
+```
+
+You can further test that the output is in JSON format by using:
+
+```
+    curl http://localhost:1337/ps | jq -r .
 ```
 
 Guide
@@ -49,7 +61,7 @@ Here is a short guide to the files
 Design
 ======
 
-As I am not able to use any third-party libraries, I have implemented:
+As I am not able to use any third-party libraries, I have implemented in pure ruby:
 
 * Base JSON functionality, for outputting of JSON
 * Base socket-handling TCP server, ensuring to use nonblocking sockets, with select(2)
