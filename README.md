@@ -12,6 +12,7 @@ Running
 To run, simply type: 
 
 ```
+    cd lib/
     ruby ./ps_server.rb
 ```
 
