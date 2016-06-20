@@ -34,15 +34,20 @@ class ProcfsEntry                                   # Process is a reserved word
       stat = IO.read("/proc/#{@pid}/stat")
       stat[ /\(.*\)/ ] = '()'              # Remove the comm stat[1] as it can
                                            # contain spaces and parentheses
-      stat.split(' ')[3]
+      stat.split(' ')[3].to_i
     rescue
-      -1
+      nil
     end
   end
 
   def parse_name
     begin
-      IO.read("/proc/#{@pid}/comm").chop  # kernel >= 2.6.33 . Would use stat[1] otherwise
+      # On kernel 2.6.33+ we would do this >>
+      # IO.read("/proc/#{@pid}/comm").chop  # kernel >= 2.6.33 . Would use stat[1] otherwise
+
+      # Backwards compatible way is to do this >>
+      stat = IO.read("/proc/#{@pid}/stat")
+      stat.gsub(/^[^(]*\(/, '').gsub(/\)[^\)]*$/, '')    # largest part inside brackets
     rescue
       "** unknown **"
     end
