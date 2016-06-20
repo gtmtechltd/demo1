@@ -12,6 +12,7 @@ Running
 To run, simply type: 
 
 ```
+    sudo yum install ruby
     cd lib/
     ruby ./ps_server.rb
 ```
@@ -32,11 +33,41 @@ When the server is running, type - either natively, or within the running docker
     curl http://localhost:1337/ps    # to exercise the ps functionality
 ```
 
-You can further test that the output is in JSON format by using:
+You can further test that the output is in correct JSON format by using:
 
 ```
+    sudo yum install wget telnet
+    sudo wget -O /usr/local/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+    sudo chmod 755 /usr/local/bin/jq
+
     curl http://localhost:1337/ps | jq -r .
 ```
+
+You can further test that behaviour works with concurrent connections by using (for example):
+
+```
+    sudo yum install httpd
+    ab -n 100 -c 10  http://localhost:1337/ps # simulate 10 concurrent connections over 100 times
+
+    Concurrency Level: 10
+    Complete requests: 100
+    Failed requests:   0
+    Total transferred: 422100 bytes
+```
+
+You can further test that behaviour works with slow connections by using telnet:
+
+```
+    telnet localhost 1337
+    Connected to localhost.
+    Escape character is '^]'.
+    GET / HTTP/1.1
+    Host: localhost
+
+```
+
+(enter twice)
+    
 
 Guide
 =====
